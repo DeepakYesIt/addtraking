@@ -8,5 +8,9 @@ class Toaster {
         public fun showToas(context:Context,msg:String){
             Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
         }
+
+        public fun showToastMsg(context:Context,msg:String){
+            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
+        }
     }
 }
