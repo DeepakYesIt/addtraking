@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-      /*  var  tc= findViewById<TextView>(R.id.tv_session)
+        /*var  tc= findViewById<TextView>(R.id.tv_session)
 
 
         AddTraking.time=AddTraking.StartSession(this)

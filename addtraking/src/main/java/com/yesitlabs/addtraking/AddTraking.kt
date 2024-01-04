@@ -503,7 +503,7 @@ class AddTraking{
 
                 var gps = GPSTracker(context)
 
-
+                var timeDelta:Long=0
 
 
                 if (gps.getLocation() != null) {
@@ -514,8 +514,7 @@ class AddTraking{
                     altitude = gps.getLocation().altitude
                     Location_Type = gps.getLocation().provider.toString()
                     getpostalCode = getpostalCode(gps.getLatitude(), gps.getLongitude(), context)
-                    speed = gps.getLocation().speed
-
+                    speed = gps.getLocation().speedAccuracyMetersPerSecond
                 } else {
                     HorizontalAccuracy = 0.0f
                     Vertical_Accuracy = 0.0f
@@ -526,6 +525,7 @@ class AddTraking{
                     Location_Type = ""
                     getpostalCode = ""
                 }
+
 
                 val deviceModel = getDeviceModel()
 //                val MaidID = generateMaidID()
@@ -553,15 +553,9 @@ class AddTraking{
                 val hem=calculateMD5HashEmail(email)
 
                 // Retrieve the default locale/language of the device
-
-                // Retrieve the default locale/language of the device
                 val currentLocale = Locale.getDefault()
                 val language = currentLocale.language // This will give you the language code
 
-
-                // If you want to get the display name of the language (e.g., "English", "Español")
-
-                // If you want to get the display name of the language (e.g., "English", "Español")
                 val languageDisplayName = currentLocale.getDisplayName(currentLocale)
 
                 val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
@@ -642,6 +636,8 @@ class AddTraking{
                     .show()
             }
         }
+
+
 
         private fun isOnline(context: Context?): Boolean {
             if (context != null) {
