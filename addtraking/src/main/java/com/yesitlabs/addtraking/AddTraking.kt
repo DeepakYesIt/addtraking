@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodSubtype
 import android.webkit.WebSettings
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -185,7 +186,8 @@ class AddTraking{
             "Android ${android.os.Build.VERSION.SDK_INT} (${android.os.Build.VERSION.RELEASE})"
 
         // this line use for deviceOS
-        private val deviceOSV = android.os.Build.VERSION.SDK_INT
+//        private val deviceOSV = android.os.Build.VERSION.SDK_INT
+        val deviceOSV = Build.VERSION.RELEASE
 
         // this function call for ConnectionProvider
         private fun getConnectionProvider(context: Context): String? {
@@ -238,8 +240,8 @@ class AddTraking{
             return countryCode
         }
 
-        // this function call for country
-        private var country = Locale.getDefault().country
+//        // this function call for country
+//        private var country = Locale.getDefault().country
 
 
         // this function call for postalCode
@@ -477,6 +479,7 @@ class AddTraking{
             return null
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         @SuppressLint("HardwareIds")
         fun sendData(
             context: Context,
@@ -495,6 +498,7 @@ class AddTraking{
                 var altitude = 0.0
                 var Location_Type = ""
                 var getpostalCode = ""
+                var country:String = ""
                 var session = getSessionStart(context, time)
 
                 var gps = GPSTracker(context)
@@ -511,6 +515,7 @@ class AddTraking{
                     Location_Type = gps.getLocation().provider.toString()
                     getpostalCode = getpostalCode(gps.getLatitude(), gps.getLongitude(), context)
                     speed = gps.getLocation().speed
+
                 } else {
                     HorizontalAccuracy = 0.0f
                     Vertical_Accuracy = 0.0f
@@ -523,7 +528,8 @@ class AddTraking{
                 }
 
                 val deviceModel = getDeviceModel()
-                val MaidID = generateMaidID()
+//                val MaidID = generateMaidID()
+                val MaidID = "GAID"
                 val cell_id = getVendorIdentifier(context)
                 val UserAgent = getUserAgent(context)
                 val Language = getKeyboardLanguage(context)
@@ -531,7 +537,7 @@ class AddTraking{
                 val AppName = getAppName(context)
                 val SSID = getSSID(context)
                 val BSSID = getBSSID(context)
-
+                country=getCountry(context,gps.getLatitude(),gps.getLongitude())
 
                 val imei = getIMEI(context)
                 val Country_Code = getConnectionCountryCode(context)
@@ -558,8 +564,8 @@ class AddTraking{
                 // If you want to get the display name of the language (e.g., "English", "Español")
                 val languageDisplayName = currentLocale.getDisplayName(currentLocale)
 
-
                 val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
+
                 val call: Call<ApiModel> = apiInterface.addData(
                     license_key,
                     Device_Type,
@@ -650,7 +656,26 @@ class AddTraking{
             }
             return false
         }
+
+        private fun getCountry(context: Context,lat:Double,longi:Double):String{
+            var countryName:String=""
+            var addresses: List<Address>? = null
+            val geocoder = Geocoder(context, Locale.getDefault())
+            try {
+                addresses = geocoder.getFromLocation(lat, longi, 1)
+                println("add in string " + addresses!!.toTypedArray().toString())
+                countryName = addresses!![0].countryName
+                val countryCode = addresses!![0].countryCode
+            } catch (e: IOException) {
+                // TODO Auto-generated catch block
+                e.printStackTrace()
+            }
+
+            return countryName
+        }
     }
+
+
 
 
 }
