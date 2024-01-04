@@ -596,7 +596,7 @@ class AddTraking{
                     mnc.toString(),
                     mcc.toString(),
                     session,
-                    UserAgent,
+                    "",
                     speed.toString(),
                     formattedTimestamp.toString(),
                     MSISDN,
